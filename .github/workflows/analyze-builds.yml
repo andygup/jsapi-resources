@@ -60,7 +60,7 @@ jobs:
         name: create zip files
         run: |
           node /create-zip.js
-      -name: commit zip files
+      - name: commit zip files
           git status
           git add ./zips/
           git commit -m "ci: add zip files" || true
