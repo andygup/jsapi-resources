@@ -40,7 +40,7 @@ jobs:
             echo "analyzing builds"
             echo "skip=false" >> $GITHUB_OUTPUT
           fi
-      - if: steps.build.outputs.skip == 'false'
+      - if: steps.build.outputs.skip == 'true'
         name: setup node
         uses: actions/setup-node@v4
         with:
@@ -50,7 +50,8 @@ jobs:
         run: |
           cd ./.github/scripts/
           npm i      
-      - name: Setup up git config
+      - if: steps.build.outputs.skip == 'true'          
+        name: Setup up git config
         run: | 
           git branch
           git status
