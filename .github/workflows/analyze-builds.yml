@@ -84,7 +84,7 @@ jobs:
           echo "creating zips branch"
           git branch zips
       - name: commit zip files
-        if: steps.verify.outputs.zipskip == 'true'        
+        if: steps.verify.outputs.zipskip == 'false'        
         working-directory: .github/scripts
         run: |
           git checkout zips
