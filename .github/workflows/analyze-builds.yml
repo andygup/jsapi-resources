@@ -61,7 +61,7 @@ jobs:
       - if: steps.build.outputs.zipskip == 'true'
         name: create zip files
         run: |
-          node /create-zip.js
+          node ./.github/scripts/create-zip.js
       - if: steps.build.outputs.zipskip == 'true'
         name: commit zip files
         run: |
