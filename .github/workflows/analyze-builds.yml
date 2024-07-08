@@ -22,10 +22,10 @@ jobs:
           samples_changed=$(git diff --name-only "$current_branch" $(git merge-base "$current_branch" origin/main) -- "./core-samples" "./components")
           if [ -z "$samples_changed" ]; then
             echo "no samples changed, skipping creation of zip files"
-            echo "zipskip=true" >> $GITHUB_OUTPUT
-            echo "skip=true" >> $GITHUB_OUTPUT            
+            echo "zipskip=true" >> $GITHUB_OUTPUT   
           else
             echo "samples changed: $samples_changed"
+            echo "zipskip=false" >> $GITHUB_OUTPUT
           fi
           # does the zips directory exist
           zips_exists=$(git ls-remote --heads origin refs/heads/zips)
@@ -78,7 +78,7 @@ jobs:
         working-directory: .github/scripts        
         run: |
           node create-zips.js
-      - name: cireate zips directory if it doesn't exist
+      - name: create zips directory if it doesn't exist
         if: steps.build.outputs.zipsexists == 'false'        
         run: |
           git branch zips
