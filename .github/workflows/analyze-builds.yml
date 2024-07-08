@@ -52,8 +52,6 @@ jobs:
           npm i      
       - name: Setup up git config
         run: | 
-          echo "skip=$skip" >> $GITHUB_ENV
-          echo "zipskip=$zipskip" >> $GITHUB_ENV
           git branch
           git status
           git config --global user.name "github-actions[bot]"
@@ -61,18 +59,17 @@ jobs:
       - if: steps.build.outputs.zipskip == 'true'
         name: create zip files
         run: |
-          cd ./.github/scripts/
-          node create-zip.js
+          node /create-zip.js
+      -name: commit zip files
           git status
-          git add ./zips/    
-          git commit -m "ci: create zip files" || true
+          git add ./zips/
+          git commit -m "ci: add zip files" || true
           git push origin ${{ github.event.pull_request.head.ref }}
-          git status                
+          git status
       - if: steps.build.outputs.skip == 'false'
         name: run sample metrics script
         run: |
-          node ./.github/scripts/analyze-builds.js
-          node ./.github/scripts/create-zip.js        
+          node ./.github/scripts/analyze-builds.js      
       - name: push sample metrics analysis
         if: steps.build.outputs.skip == 'false'
         run: |
