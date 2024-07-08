@@ -38,6 +38,7 @@ jobs:
       - name: should samples build
         id: build
         run: |
+          current_branch=$(git rev-parse --abbrev-ref HEAD)        
           # package.json files changed in the branch
           packages_changed=$(git diff --name-only "$current_branch" $(git merge-base "$current_branch" origin/main) -- "./core-samples/**/package.json")
           # metric files changed in the previous commit
