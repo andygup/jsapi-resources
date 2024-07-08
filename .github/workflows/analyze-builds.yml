@@ -74,16 +74,16 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"           
       - name: create zip files
-        if: steps.build.outputs.zipskip == 'true'        
+        if: steps.verify.outputs.zipskip == 'true'        
         working-directory: .github/scripts        
         run: |
           node create-zips.js
       - name: create zips directory if it doesn't exist
-        if: steps.build.outputs.zipsexists == 'false'        
+        if: steps.verify.outputs.zipsexists == 'false'        
         run: |
           git branch zips
       - name: commit zip files
-        if: steps.build.outputs.zipskip == 'true'        
+        if: steps.verify.outputs.zipskip == 'true'        
         working-directory: .github/scripts
         run: |
           git status
