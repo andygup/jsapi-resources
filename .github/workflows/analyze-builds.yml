@@ -48,11 +48,10 @@ jobs:
           check-latest: true 
       - if: steps.build.outputs.skip == 'true'
         name: install dependencies for sample metrics script
-        run: |
-          cd ./.github/scripts/
+        working-directory: .github/scripts
           npm i      
       - if: steps.build.outputs.skip == 'true'          
-        name: Setup up git config
+        name: Setup up git config        
         run: | 
           git branch
           git status
@@ -60,22 +59,26 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"           
       - if: steps.build.outputs.zipskip == 'true'
         name: create zip files
+        working-directory: .github/scripts        
         run: |
-          node ./.github/scripts/create-zips.js
+          node create-zips.js
       - if: steps.build.outputs.zipskip == 'true'
         name: commit zip files
+        working-directory: /.github/scripts
         run: |
           git status
           git add ../../zips/
           git commit -m "ci: add zip files" || true
           git push origin ${{ github.event.pull_request.head.ref }}
           git status
-      - if: steps.build.outputs.skip == 'false'
-        name: run sample metrics script
+      - name: run sample metrics script
+        if: steps.build.outputs.skip == 'false'        
+        working-directory: .github/scripts
         run: |
-          node ./.github/scripts/analyze-builds.js      
+          node analyze-builds.js      
       - name: push sample metrics analysis
         if: steps.build.outputs.skip == 'false'
+        working-directory: /
         run: |
           git add ./core-samples/.metrics/*.csv
           git status
