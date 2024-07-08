@@ -44,8 +44,9 @@ jobs:
           npm i
       - if: steps.build.outputs.skip == 'false'
         name: run sample metrics script
-        run: node ./.github/scripts/analyze-builds.js
-        run: node ./.github/scripts/create-zip.js        
+        run: |
+          node ./.github/scripts/analyze-builds.js
+          node ./.github/scripts/create-zip.js        
       - name: push sample metrics analysis
         if: steps.build.outputs.skip == 'false'
         run: |
