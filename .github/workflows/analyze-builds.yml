@@ -13,7 +13,7 @@ jobs:
         with:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.ref }}
-          token: ${{ secrets.ESM_BUILD }}
+          token: ${{ secrets.GITHUB_TOKEN }}
       - name: should samples build
         id: build
         run: |
