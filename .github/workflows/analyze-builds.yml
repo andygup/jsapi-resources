@@ -45,11 +45,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           check-latest: true 
-      - if: steps.build.outputs.skip == 'false'
+      - if: steps.build.outputs.skip == 'true'
         name: install dependencies for sample metrics script
         run: |
           cd ./.github/scripts/
-          npm i
+          npm i      
       - name: Setup up git config
         run: | 
           echo "skip=$skip" >> $GITHUB_ENV
@@ -58,7 +58,7 @@ jobs:
           git status
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"           
-      - if: steps.build.outputs.zipskip == 'false'
+      - if: steps.build.outputs.zipskip == 'true'
         name: create zip files
         run: |
           cd ./.github/scripts/
