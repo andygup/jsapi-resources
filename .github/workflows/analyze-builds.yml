@@ -22,10 +22,10 @@ jobs:
           samples_changed=$(git diff --name-only "$current_branch" $(git merge-base "$current_branch" origin/main) -- "./core-samples" "./components")
           if [ -z "$samples_changed" ]; then
             echo "no samples changed, skipping creation of zip files"
+            echo "zipskip=true" >> $GITHUB_OUTPUT
+            echo "skip=true" >> $GITHUB_OUTPUT            
           else
             echo "samples changed: $samples_changed"
-            echo "zipskip=true" >> $GITHUB_OUTPUT
-            echo "skip=true" >> $GITHUB_OUTPUT
           fi
           # package.json files changed in the branch
           packages_changed=$(git diff --name-only "$current_branch" $(git merge-base "$current_branch" origin/main) -- "./core-samples/**/package.json")
