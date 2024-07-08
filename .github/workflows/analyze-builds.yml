@@ -33,10 +33,9 @@ jobs:
           fi
       - if: steps.build.outputs.skip == 'false'
         name: setup node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          check-latest: true        
-          node-version: 18
+          check-latest: true 
       - if: steps.build.outputs.skip == 'false'
         name: install dependencies for sample metrics script
         run: |
@@ -45,6 +44,7 @@ jobs:
       - if: steps.build.outputs.skip == 'false'
         name: run sample metrics script
         run: node ./.github/scripts/analyze-builds.js
+        run: node ./.github/scripts/create-zip.js        
       - name: push sample metrics analysis
         if: steps.build.outputs.skip == 'false'
         run: |
