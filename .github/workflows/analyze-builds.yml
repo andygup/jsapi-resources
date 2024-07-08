@@ -31,6 +31,7 @@ jobs:
           zips_exists=$(git ls-remote --heads origin refs/heads/zips)
           if [ -z "$zips_exists" ]; then
             echo "zips branch exists"
+            echo "zipsexists=true" >> $GITHUB_OUTPUT            
           else
             echo "zips branch exists will need to create it"
             echo "zipsexists=false" >> $GITHUB_OUTPUT
@@ -45,9 +46,11 @@ jobs:
           metrics_changed=$(git diff --name-only HEAD^ HEAD -- "./core-samples/.metrics/*.csv")
           if [ -z "$packages_changed" ]; then
             echo "no package.json files changed, skipping build analysis"
+            echo "skip=true" >> $GITHUB_OUTPUT
           elif [ -n "$metrics_changed" ]; then
             echo "metric files changed: $metrics_changed"
             echo "the previous commit contained build metrics, skipping build analysis"
+            echo "skip=true" >> $GITHUB_OUTPUT            
           else
             echo "package.json files changed: $packages_changed"
             echo "analyzing builds"
