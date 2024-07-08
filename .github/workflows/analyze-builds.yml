@@ -18,6 +18,14 @@ jobs:
         id: build
         run: |
           current_branch=$(git rev-parse --abbrev-ref HEAD)
+          # did any files change in component or core samples
+          samples_changed=$(git diff --name-only "$current_branch" $(git merge-base "$current_branch" origin/main) -- "./core-samples" "./components")
+          if [ -z "$samples_changed" ]; then
+            echo "no samples changed, skipping creation of zip files"
+          else
+            echo "samples changed: $samples_changed"
+            echo "zipskip=false" >> $GITHUB_OUTPUT
+          fi
           # package.json files changed in the branch
           packages_changed=$(git diff --name-only "$current_branch" $(git merge-base "$current_branch" origin/main) -- "./core-samples/**/package.json")
           # metric files changed in the previous commit
@@ -42,6 +50,24 @@ jobs:
         run: |
           cd ./.github/scripts/
           npm i
+      - name: Setup up git config
+        run: | 
+          echo "skip=$skip" >> $GITHUB_ENV
+          echo "zipskip=$zipskip" >> $GITHUB_ENV
+          git branch
+          git status
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"           
+      - if: steps.build.outputs.zipskip == 'false'
+        name: create zip files
+        run: |
+          cd ./.github/scripts/
+          node create-zip.js
+          git status
+          git add ./zips/    
+          git commit -m "ci: create zip files" || true
+          git push origin ${{ github.event.pull_request.head.ref }}
+          git status                
       - if: steps.build.outputs.skip == 'false'
         name: run sample metrics script
         run: |
@@ -50,10 +76,6 @@ jobs:
       - name: push sample metrics analysis
         if: steps.build.outputs.skip == 'false'
         run: |
-          git branch
-          git status
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add ./core-samples/.metrics/*.csv
           git status
           git commit -m "ci: analyze core esm sample builds" || true
