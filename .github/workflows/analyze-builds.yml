@@ -41,29 +41,30 @@ jobs:
             echo "analyzing builds"
             echo "skip=false" >> $GITHUB_OUTPUT
           fi
-      - if: steps.build.outputs.skip == 'true'
-        name: setup node
+      - name: setup node
+        if: steps.build.outputs.skip == 'true'        
         uses: actions/setup-node@v4
         with:
           check-latest: true 
-      - if: steps.build.outputs.skip == 'true'
-        name: install dependencies for sample metrics script
+      - name: install dependencies for sample metrics script
+        if: steps.build.outputs.skip == 'true'        
         working-directory: .github/scripts
-          npm i      
-      - if: steps.build.outputs.skip == 'true'          
-        name: Setup up git config        
+        run: |
+          npm i             
+      - name: Setup up git config
+        if: steps.build.outputs.skip == 'true'           
         run: | 
           git branch
           git status
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"           
-      - if: steps.build.outputs.zipskip == 'true'
-        name: create zip files
+      - name: create zip files
+        if: steps.build.outputs.zipskip == 'true'        
         working-directory: .github/scripts        
         run: |
           node create-zips.js
-      - if: steps.build.outputs.zipskip == 'true'
-        name: commit zip files
+      - name: commit zip files
+        if: steps.build.outputs.zipskip == 'true'        
         working-directory: /.github/scripts
         run: |
           git status
