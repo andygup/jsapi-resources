@@ -65,7 +65,7 @@ jobs:
           node create-zips.js
       - name: commit zip files
         if: steps.build.outputs.zipskip == 'true'        
-        working-directory: /.github/scripts
+        working-directory: .github/scripts
         run: |
           git status
           git add ../../zips/
