@@ -14,8 +14,8 @@ jobs:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.ref }}
           token: ${{ secrets.GITHUB_TOKEN }}
-      - name: should samples build
-        id: build
+      - name: should create zip files
+        id: verify
         run: |
           current_branch=$(git rev-parse --abbrev-ref HEAD)
           # did any files change in component or core samples
@@ -27,6 +27,17 @@ jobs:
           else
             echo "samples changed: $samples_changed"
           fi
+          # does the zips directory exist
+          zips_exists=$(git ls-remote --heads origin refs/heads/zips)
+          if [ -z "$zips_exists" ]; then
+            echo "zips branch exists"
+          else
+            echo "zips branch exists will need to create it"
+            echo "zipsexists=false" >> $GITHUB_OUTPUT
+          fi                  
+      - name: should samples build
+        id: build
+        run: |
           # package.json files changed in the branch
           packages_changed=$(git diff --name-only "$current_branch" $(git merge-base "$current_branch" origin/main) -- "./core-samples/**/package.json")
           # metric files changed in the previous commit
@@ -63,6 +74,10 @@ jobs:
         working-directory: .github/scripts        
         run: |
           node create-zips.js
+      - name: verify if zips directory exists
+        if: steps.build.outputs.zipsexists == 'false'        
+        run: |
+          git branch zips
       - name: commit zip files
         if: steps.build.outputs.zipskip == 'true'        
         working-directory: .github/scripts
@@ -70,7 +85,7 @@ jobs:
           git status
           git add ../../zips/
           git commit -m "ci: add zip files" || true
-          git push origin ${{ github.event.pull_request.head.ref }}
+          git push origin zips
           git status
       - name: run sample metrics script
         if: steps.build.outputs.skip == 'false'        
