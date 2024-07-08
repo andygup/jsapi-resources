@@ -67,7 +67,7 @@ jobs:
         run: |
           npm i             
       - name: Setup up git config
-        if: steps.build.outputs.skip == 'false' || steps.verify.outputs.zipskip == 'false       
+        if: steps.build.outputs.skip == 'false' || steps.verify.outputs.zipskip == 'false'
         run: | 
           git branch
           git status
