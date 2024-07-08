@@ -30,11 +30,11 @@ jobs:
           # does the zips directory exist
           zips_exists=$(git ls-remote --heads origin refs/heads/zips)
           if [ -z "$zips_exists" ]; then
-            echo "zips branch exists"
-            echo "zipsexists=true" >> $GITHUB_OUTPUT            
+            echo "zips branch doesn't exists, need to create it"
+            echo "zipsexists=false" >> $GITHUB_OUTPUT            
           else
-            echo "zips branch exists will need to create it"
-            echo "zipsexists=false" >> $GITHUB_OUTPUT
+            echo "zips branch exists"
+            echo "zipsexists=true" >> $GITHUB_OUTPUT
           fi                  
       - name: should samples build
         id: build
@@ -78,7 +78,7 @@ jobs:
         working-directory: .github/scripts        
         run: |
           node create-zips.js
-      - name: verify if zips directory exists
+      - name: cireate zips directory if it doesn't exist
         if: steps.build.outputs.zipsexists == 'false'        
         run: |
           git branch zips
