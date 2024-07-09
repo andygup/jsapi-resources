@@ -1,13 +1,23 @@
 #!/usr/bin/env node
+
+/**
+ * **WARNING:** when running this script locally, make sure you don't have any built samples,
+ * they will get zipped!
+ * This script creates zips for the samples in the SAMPLE_DIRS array.
+ * Everything in the directory path will be zipped.
+ * The zips will be created in the OUTPUT_DIR directory.
+ * The zips will be named as follows: {name of the sample directory}-{name of the subdirectory}.zip
+ * For example, core-sample-01.zip
+ */
 const { resolve } = require("path");
 const {
-  promises: { readdir }, 
-  existsSync, 
-  mkdirSync
+  promises: { readdir },
+  existsSync,
+  mkdirSync,
+  rmSync
 } = require("fs");
 const { createWriteStream } = require("fs-extra");
 const archiver = require("archiver");
-// const { create } = require("domain");
 
 const OUTPUT_DIR = "../../zips";
 const SAMPLES_RELATIVE_PATH = "../../";
@@ -30,13 +40,20 @@ const logHeader = (message) => {
 };
 
 /**
- * Verify and create the output directory
+ * Verify and create the output directory.
+ * If the directory already exists then delete it and recreate it.
  * @param {String} directory - path to the directory
  */
 const createZipDirectory = (directory) => {
   if (!existsSync(directory)) {
+    console.log(`Creating the directory ${directory}...`);
     mkdirSync(directory);
-  }  
+  }
+  else {
+    console.log(`The directory ${directory} already exists. Deleting and recreating...`);
+    rmSync(directory, { recursive: true });
+    mkdirSync(directory);
+  }
 }
 
 /**
