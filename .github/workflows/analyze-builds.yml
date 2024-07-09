@@ -89,9 +89,6 @@ jobs:
         run: |
           git add ../../zips/
           git commit -m "ci: add zip files" || true
-          git push origin ${{ github.event.pull_request.head.ref }}:zips
-          git status
-          git checkout ${{ github.event.pull_request.head.ref }}          
       - name: run sample metrics script
         if: steps.build.outputs.skip == 'false'        
         working-directory: .github/scripts
