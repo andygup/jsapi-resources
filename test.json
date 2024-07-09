@@ -1,4 +1,5 @@
 {
   "test": "test",
-  "name": "jsapi-angular-cli"
+  "name": "jsapi-angular-cli",
+  "test2": "test2"
 }
