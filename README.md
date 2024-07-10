@@ -2,7 +2,7 @@ Resources for the ArcGIS Maps SDK for JavaScript
 ===============
 A collection of resources for developers using the [ArcGIS Maps SDK for JavaScript](https://js.arcgis.com). Refer to the README files in each subdirectory for specific instructions on how to use a particular resource. 
 
-## Samples (Test)
+## Samples
 
 This repository provides a collection of code samples that provide _proof-of-concept_ for using the ArcGIS Maps SDK for JavaScript components and core API with a variety of popular build tools, frameworks and module bundlers. 
 
