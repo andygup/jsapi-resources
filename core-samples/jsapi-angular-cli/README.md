@@ -2,7 +2,7 @@
 
 This sample demonstrates how to use [@arcgis/core](https://www.npmjs.com/package/@arcgis/core) ES modules with Angular. 
 
-## Get Started
+## Get Started (Test)
 
 Run `npm install` and then start adding functionality.
 
