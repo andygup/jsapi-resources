@@ -2,7 +2,7 @@
 
 This sample demonstrates how to use the [`@arcgis/core`](https://www.npmjs.com/package/@arcgis/core) ES modules with webpack.
 
-## Get Started (Test)
+## Get Started (Test Test)
 
 Run `npm install` and then start adding modules.
 
