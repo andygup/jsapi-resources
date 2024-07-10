@@ -1,6 +1,6 @@
 # Charts components Angular sample (beta)
 
-## Get Started
+## Get Started (Test)
 
 Run `npm install` and then start adding modules.
 
